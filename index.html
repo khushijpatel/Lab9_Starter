@@ -87,16 +87,23 @@
     </section>
   </main>
 
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
-    class CustomError extends Error {
+    window.TrackJS && TrackJS.install({ 
+      token: "46103d83401e43faa81181347bafea9d"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>             
+                        
+  <script>
+    class InputError extends Error {
         constructor(message) {
             super(message);
             this.name = this.constructor.name;
         }
     }
 
-    class NegativeNumberError extends CustomError {
+    class NegativeNumberError extends InputError {
       constructor(number) {
         super(`The number ${number} is less than 0`);
         this.number = number;
@@ -110,13 +117,25 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      //step 3
+      try{
+        let status = "successfully";
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+        } catch (err){
+          status = "unsuccessfully";
+          throw new InputError("One of the inputs is not a number"); //step 4
+        } finally{
+          console.log(`Task Performed ${status}`);
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    //step 2
     let consoleLog = errorBtns[0]
     consoleLog.addEventListener("click", function(){
       console.log("Console Log Demo")
@@ -169,7 +188,21 @@
 
     let consoleTable = errorBtns[10]
     consoleTable.addEventListener("click", function(){
-      console.table(["one", "two", "three"])
+      const classes = [
+        {
+          name: 'CSE 110',
+          professor: 'Powell',
+        },
+        {
+          name: 'CSE 101',
+          professor: 'Jones',
+        },
+        {
+          name: 'CSE 130',
+          professor: 'Nadia Polikarpova'
+        }
+      ];
+      console.table(classes)
     })
 
     let startTimer = errorBtns[11]
@@ -193,28 +226,16 @@
       throw new Error("global error");
     })
 
-    let num = +prompt("Enter a positive integer number?", 35)
-
-    let diff, result;
-
-    function fib(n) {
-      if (n < 0 || Math.trunc(n) != n) {
-        throw new NegativeNumberError(n);
-      }
-      return n <= 1 ? n : fib(n - 1) + fib(n - 2);
+    window.onerror = (message, url, line, col, error) => {
+        console.log(`message: ${message}`);
+        console.log(`url: ${url}`);
+        console.log(`line: ${line}`);
+        console.log(`col: ${col}`);
+        console.log(`error: ${error}`);
     }
 
-    let start = Date.now();
-
-    try {
-      result = fib(num);
-    } catch (err) {
-      result = 0;
-      alert(result || err.message);
-    } finally {
-      diff = Date.now() - start;
-      alert( `execution took ${diff}ms` );
-    }
+    //step 5
+    TrackJS.track('Testing TrackJS!');
 
   </script>
 </body>
