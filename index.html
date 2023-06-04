@@ -87,7 +87,22 @@
     </section>
   </main>
 
+
   <script>
+    class CustomError extends Error {
+        constructor(message) {
+            super(message);
+            this.name = this.constructor.name;
+        }
+    }
+
+    class NegativeNumberError extends CustomError {
+      constructor(number) {
+        super(`The number ${number} is less than 0`);
+        this.number = number;
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -102,6 +117,105 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+    let consoleLog = errorBtns[0]
+    consoleLog.addEventListener("click", function(){
+      console.log("Console Log Demo")
+    })
+
+    let consoleError = errorBtns[1]
+    consoleError.addEventListener("click", function(){
+      console.error("Console Error Demo")
+    })
+
+    let consoleCount = errorBtns[2]
+    consoleCount.addEventListener("click", function(){
+      console.count("Console Count Button")
+    })
+
+    let consoleWarn = errorBtns[3]
+    consoleWarn.addEventListener("click", function(){
+      console.warn("Console Warn Button")
+    })
+
+    let consoleAssert = errorBtns[4]
+    consoleAssert.addEventListener("click", function(){
+      console.assert(false, 10)
+    })
+
+    let consoleClear = errorBtns[5]
+    consoleClear.addEventListener("click", function(){
+      console.clear()
+    })
+
+    let consoleDir = errorBtns[6]
+    consoleDir.addEventListener("click", function(){
+      console.dir(document.location)
+    })
+
+    let consoleDirxml = errorBtns[7]
+    consoleDirxml.addEventListener("click", function(){
+      console.dirxml(document.location)
+    })
+
+    let consoleGroupStart = errorBtns[8]
+    consoleGroupStart.addEventListener("click", function(){
+      console.group()
+    })
+
+    let consoleGroupEnd = errorBtns[9]
+    consoleGroupEnd.addEventListener("click", function(){
+      console.groupEnd()
+    })
+
+    let consoleTable = errorBtns[10]
+    consoleTable.addEventListener("click", function(){
+      console.table(["one", "two", "three"])
+    })
+
+    let startTimer = errorBtns[11]
+    startTimer.addEventListener("click", function(){
+      console.time("this is a timer")
+    })
+
+    let endTimer = errorBtns[12]
+    endTimer.addEventListener("click", function(){
+      console.timeEnd("this is a timer")
+    })
+
+    let consoleTrace = errorBtns[13]
+    consoleTrace.addEventListener("click", function(){
+      console.trace(consoleLog, consoleError)
+    })
+
+    let globalError = errorBtns[14]
+    globalError.addEventListener("click", function(){
+      console.log("Console Log Trigger Big Error")
+      thisIsError = thisIsError + 1;
+    })
+
+    let num = +prompt("Enter a positive integer number?", 35)
+
+    let diff, result;
+
+    function fib(n) {
+      if (n < 0 || Math.trunc(n) != n) {
+        throw new NegativeNumberError(n);
+      }
+      return n <= 1 ? n : fib(n - 1) + fib(n - 2);
+    }
+
+    let start = Date.now();
+
+    try {
+      result = fib(num);
+    } catch (err) {
+      result = 0;
+      alert(result || err.message);
+    } finally {
+      diff = Date.now() - start;
+      alert( `execution took ${diff}ms` );
+    }
+
   </script>
 </body>
 
