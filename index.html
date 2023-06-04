@@ -190,7 +190,7 @@
     let globalError = errorBtns[14]
     globalError.addEventListener("click", function(){
       console.log("Console Log Trigger Big Error")
-      thisIsError = thisIsError + 1;
+      throw new Error("global error");
     })
 
     let num = +prompt("Enter a positive integer number?", 35)
